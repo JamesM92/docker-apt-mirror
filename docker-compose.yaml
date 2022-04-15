@@ -1,0 +1,37 @@
+version: '2'
+
+networks:
+  frontend:
+    external:
+      name: FrontEnd
+  backend:
+    external:
+      name: BackEnd
+
+volumes:
+    
+  data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /srv/dev-disk-by-label-Archive/portainer/aptmirror/_data/data
+
+
+
+services:
+  moodle:
+    #image: ghcr.io/jamesm92/aptmirror
+    image: aptmirror
+    container_name: AptMirror
+    restart: unless-stopped
+    ports:
+      - '53:53'
+      - '80:80'
+    environment:
+
+    volumes:
+      - data:/var/spool/apt-mirror
+    networks:
+      - frontend
+      - backend
